@@ -1,0 +1,31 @@
+{
+  "manifest": 1,
+
+  "extension": {
+    "id": "wxl-races-64",
+    "version": "1.0.0",
+    "abi": "1.1",
+    "entry": "wxl-races-64.dll",
+    "assets": [],
+    "requires": {},
+    "conflicts": [],
+    "hooks": []
+  },
+
+  "deploy": {
+    "mode": "release",
+    "match": "*.dll"
+  },
+
+  "listing": {
+    "title": "64 Playable Races",
+    "tagline": "Expands the 3.3.5a client to support race IDs 0 through 63.",
+    "description": "README.MD",
+    "gallery": [],
+    "categories": ["character-creation", "gameplay"],
+    "accent": "#8b5cf6"
+  },
+
+  "license": null,
+  "signature": null
+}

@@ -1,0 +1,68 @@
+# Build the extension against wxl-core 1.1 and publish the DLL consumed by wxl-hub.
+name: Build and Release
+
+on:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: write
+
+env:
+  EXT_NAME: wxl-races-64
+  CORE_REPO: WarcraftXL/wxl-core
+  CORE_REF: v1.1
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout this extension
+        uses: actions/checkout@v4
+        with:
+          path: ext
+
+      - name: Checkout wxl-core (${{ env.CORE_REF }})
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.CORE_REPO }}
+          ref: ${{ env.CORE_REF }}
+          submodules: recursive
+          path: core
+
+      - name: Add the extension to wxl-core
+        shell: pwsh
+        run: |
+          $destination = "core/extensions/$env:EXT_NAME"
+          New-Item -ItemType Directory -Force -Path $destination | Out-Null
+          Copy-Item -Path "ext/*" -Destination $destination -Recurse -Force
+
+      - name: Configure wxl-core (Win32)
+        shell: pwsh
+        run: cmake -S core -B core/build -A Win32
+
+      - name: Build extension
+        shell: pwsh
+        run: cmake --build core/build --config Release --target $env:EXT_NAME --parallel
+
+      - name: Stage DLL
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Copy-Item "core/build/Release/$env:EXT_NAME.dll" "dist/$env:EXT_NAME.dll"
+
+      - name: Read manifest version
+        id: version
+        shell: pwsh
+        run: |
+          $version = (Get-Content ext/wxl.json -Raw | ConvertFrom-Json).extension.version
+          if (-not $version) { throw "wxl.json carries no extension.version" }
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: ${{ env.EXT_NAME }} ${{ steps.version.outputs.version }}
+          body: Built from ${{ github.sha }} against wxl-core ${{ env.CORE_REF }}.
+          files: dist/${{ env.EXT_NAME }}.dll
