@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 env:
-  EXT_NAME: wxl-races-64
+  EXT_NAME: wxl-races-patcher
   CORE_REPO: WarcraftXL/wxl-core
   CORE_REF: v1.1
 

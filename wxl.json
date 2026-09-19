@@ -2,10 +2,10 @@
   "manifest": 1,
 
   "extension": {
-    "id": "wxl-races-64",
+    "id": "wxl-races-patcher",
     "version": "1.0.0",
     "abi": "1.1",
-    "entry": "wxl-races-64.dll",
+    "entry": "wxl-races-patcher.dll",
     "assets": [],
     "requires": {},
     "conflicts": [],

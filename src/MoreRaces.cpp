@@ -1,4 +1,4 @@
-// wxl-races-64: expand WoW 3.3.5a (build 12340) character creation to 64 race IDs.
+// wxl-races-patcher: expand WoW 3.3.5a (build 12340) character creation to 64 race IDs.
 // Original module: https://github.com/Furioz420/
 
 #include "wxl/PluginApi.h"
@@ -14,7 +14,7 @@
 
 namespace
 {
-    static_assert(sizeof(void*) == 4, "wxl-races-64 must be built as a Win32 DLL");
+    static_assert(sizeof(void*) == 4, "wxl-races-patcher must be built as a Win32 DLL");
 
     constexpr uintptr_t kPreferredImageBase = 0x00400000;
 
